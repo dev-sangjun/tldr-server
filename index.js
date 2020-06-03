@@ -23,12 +23,11 @@ connection.once("open", () => {
 /*
   ADD ROUTES
 */
-const login = require("./routes/login");
-const register = require("./routes/register");
-const users = require("./routes/users");
-app.use("/login", login);
-app.use("/register", register);
-app.use("/users", users);
+
+app.use("/login", require("./routes/login"));
+app.use("/register", require("./routes/register"));
+app.use("/users", require("./routes/users"));
+app.use("/posts", require("./routes/posts"));
 app.use((err, req, res, next) => {
   res.json({ message: err.message });
 });
