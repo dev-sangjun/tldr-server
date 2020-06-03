@@ -12,6 +12,15 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 /*
+  CONNECT TO MONGODB
+*/
+const connection = require("./db/connection");
+connection.on("error", console.error);
+connection.once("open", () => {
+  console.log("MongoDB connection established successfully.");
+});
+
+/*
   ADD ROUTES
 */
 const login = require("./routes/login");
@@ -20,14 +29,8 @@ const users = require("./routes/users");
 app.use("/login", login);
 app.use("/register", register);
 app.use("/users", users);
-
-/*
-  CONNECT TO MONGODB
-*/
-const connection = require("./db/connection");
-connection.on("error", console.error);
-connection.once("open", () => {
-  console.log("MongoDB connection established successfully.");
+app.use((err, req, res, next) => {
+  res.json({ message: err.message });
 });
 
 app.listen(port, () => console.log(`Server running at port: ${port}`));
