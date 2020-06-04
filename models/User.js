@@ -1,7 +1,8 @@
 const mongoose = require("mongoose"),
   bcrypt = require("bcrypt"),
-  validator = require("validator"),
-  Schema = mongoose.Schema;
+  jwt = require("jsonwebtoken"),
+  Schema = mongoose.Schema,
+  JWT_SECRET = process.env.JWT_SECRET;
 
 const userSchema = new Schema(
   {
@@ -54,6 +55,27 @@ userSchema.methods.comparePassword = function (pw, callback) {
     if (err) return callback(err);
     callback(null, result);
   });
+};
+
+userSchema.methods.generateToken = async function () {
+  const payload = {
+    user_id: this.id.toString(),
+  };
+  const options = {
+    expiresIn: 3600,
+  };
+  const token = jwt.sign(payload, JWT_SECRET, options);
+  this.tokens = this.tokens.concat({ token });
+  await this.save();
+  return token;
+};
+
+// hides private data
+userSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  delete obj.tokens;
+  return obj;
 };
 
 module.exports = mongoose.model("User", userSchema);
