@@ -13,6 +13,13 @@ const createPost = (title, content, tags) =>
       .catch(err => reject(err));
   });
 
+const getPost = id =>
+  new Promise((resolve, reject) => {
+    Post.findById(id)
+      .then(doc => resolve(doc))
+      .catch(err => reject(err));
+  });
+
 const getAllPosts = () =>
   new Promise((resolve, reject) => {
     Post.find({})
@@ -22,5 +29,6 @@ const getAllPosts = () =>
 
 module.exports = {
   createPost,
+  getPost,
   getAllPosts,
 };

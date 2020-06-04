@@ -1,8 +1,13 @@
-require("dotenv").config();
-
 const express = require("express");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 const morgan = require("morgan");
 const cors = require("cors");
+const auth = require("./middlewares/auth");
+const login = require("./routes/login");
+const register = require("./routes/register");
+const users = require("./routes/users");
+const posts = require("./routes/posts");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,13 +26,24 @@ connection.once("open", () => {
 });
 
 /*
+  DUMMY ENDPOINT TO GET A TOKEN
+*/
+app.get("/token", (req, res) => {
+  const payload = {
+    name: "Sangjun",
+  };
+  const JWT_SECRET = process.env.JWT_SECRET;
+  const token = jwt.sign(payload, JWT_SECRET);
+  res.send(token);
+});
+
+/*
   ADD ROUTES
 */
-
-app.use("/login", require("./routes/login"));
-app.use("/register", require("./routes/register"));
-app.use("/users", require("./routes/users"));
-app.use("/posts", require("./routes/posts"));
+app.use("/login", login);
+app.use("/register", register);
+app.use("/users", auth, users);
+app.use("/posts", posts);
 app.use((err, req, res, next) => {
   res.json({ message: err.message });
 });

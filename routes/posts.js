@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { createPost, getAllPosts } = require("../db/post");
+const { createPost, getPost, getAllPosts } = require("../db/post");
 
 router.get("/", async (req, res) => {
   try {
@@ -10,8 +10,14 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", (req, res) => {
-  //display a post
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await getPost(id);
+    res.json(post);
+  } catch (e) {
+    next(e);
+  }
 });
 
 router.post("/", async (req, res) => {
