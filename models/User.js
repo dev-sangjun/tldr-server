@@ -16,6 +16,14 @@ const userSchema = new Schema(
       trim: true,
       minlength: 6,
     },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

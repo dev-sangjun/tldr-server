@@ -1,6 +1,7 @@
 const User = require("../models/User"),
-  bcrypt = require("bcrypt");
-
+  bcrypt = require("bcrypt"),
+  jwt = require("jsonwebtoken"),
+  JWT_SECRET = process.env.JWT_SECRET;
 const createUser = (email, password) =>
   new Promise((resolve, reject) => {
     User.countDocuments({ email })
@@ -27,7 +28,24 @@ const authenticateUser = (email, password) =>
     });
   });
 
+const addToken = user =>
+  new Promise((resolve, reject) => {
+    const payload = {
+      user_id: user.id.toString(),
+    };
+    const options = {
+      expiresIn: 3600,
+    };
+    const token = jwt.sign(payload, JWT_SECRET, options);
+    user.tokens.push({ token });
+    user
+      .save()
+      .then(() => resolve(token))
+      .catch(err => reject(err));
+  });
+
 module.exports = {
   createUser,
   authenticateUser,
+  addToken,
 };
