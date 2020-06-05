@@ -31,6 +31,17 @@ const userSchema = new Schema(
   }
 );
 
+/* 
+  SETUP RELATIONSHIPS
+*/
+
+userSchema.virtual("posts", {
+  ref: "Post",
+  // user's _id <-> post's author
+  localField: "_id",
+  foreignField: "author",
+});
+
 const hash = async password => {
   return await new Promise((resolve, reject) => {
     const saltRounds = 10;

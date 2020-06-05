@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
       // the token is valid
       // check if this token is the user's
       const { user_id } = payload;
-      User.findOne({ id: user_id, "tokens.token": token })
+      User.findOne({ _id: user_id, "tokens.token": token })
         .then(user => {
           if (!user) return next(new Error("Invalid token: User not found."));
           req.user = user;

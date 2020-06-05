@@ -49,3 +49,10 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => console.log(`Server running at port: ${port}`));
+
+const User = require("./models/User"),
+  Post = require("./models/Post");
+
+const main = async () => {};
+
+main();

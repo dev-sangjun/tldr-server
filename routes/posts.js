@@ -1,5 +1,6 @@
-const router = require("express").Router();
-const { createPost, getPost, getAllPosts } = require("../db/post");
+const router = require("express").Router(),
+  { createPost, getPost, getAllPosts } = require("../db/post"),
+  auth = require("../middlewares/auth");
 
 router.get("/", async (req, res) => {
   try {
@@ -20,10 +21,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  const { title, content, tags } = req.body;
+router.post("/", auth, async (req, res, next) => {
+  const { title, content, tags } = req.body,
+    { _id } = req.user;
   try {
-    const post = await createPost(title, content, tags);
+    const post = await createPost(_id, title, content, tags);
     res.json(post);
   } catch (e) {
     next(e);
