@@ -3,9 +3,9 @@ const router = require("express").Router(),
   { authenticateUser } = require("../db/user");
 
 router.post("/", async (req, res, next) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
   try {
-    const user = await authenticateUser(email, password);
+    const user = await authenticateUser(username, password);
     if (!user) return next(new Error("User not authenticated."));
     // user is authenticated
     const token = await user.generateToken();

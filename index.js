@@ -45,14 +45,10 @@ app.use("/register", register);
 app.use("/users", auth, users);
 app.use("/posts", posts);
 app.use((err, req, res, next) => {
-  res.json({ message: err.message });
+  const status = err.status || 500;
+  res.status(status);
+  console.log(err.message);
+  res.send({ message: err.message });
 });
 
 app.listen(port, () => console.log(`Server running at port: ${port}`));
-
-const User = require("./models/User"),
-  Post = require("./models/Post");
-
-const main = async () => {};
-
-main();
