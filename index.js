@@ -8,7 +8,7 @@ const login = require("./routes/login");
 const register = require("./routes/register");
 const users = require("./routes/users");
 const posts = require("./routes/posts");
-
+const folders = require("./routes/folders");
 const app = express();
 const port = process.env.PORT || 5000;
 

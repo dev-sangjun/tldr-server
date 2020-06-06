@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require("mongoose"),
+  Schema = mongoose.Schema;
 
 const postSchema = new Schema(
   {
@@ -7,6 +7,11 @@ const postSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
+    },
+    folder: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Folder",
     },
     title: {
       type: String,

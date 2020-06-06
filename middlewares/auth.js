@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken"),
 module.exports = (req, res, next) => {
   const authHeader = req.header("authorization");
   const token = authHeader && authHeader.split(" ")[1];
-  console.log(authHeader);
   if (token) {
     // check if the token is valid
     jwt.verify(token, JWT_SECRET, (err, payload) => {
@@ -14,16 +13,17 @@ module.exports = (req, res, next) => {
       // check if this token is the user's
       const { user_id } = payload;
       User.findOne({ _id: user_id, "tokens.token": token })
-        .then(user => {
+        .then(async user => {
           if (!user) return next(new Error("Invalid token: User not found."));
-          user.populate("posts").execPopulate((er, result) => {
-            if (err) return next(err);
-            if (result) {
-              req.user = user;
-              req.token = token;
-            }
+          try {
+            await user.populate("posts").execPopulate();
+            await user.populate("folders").execPopulate();
+            req.user = user;
+            req.token = token;
             next();
-          });
+          } catch (e) {
+            next(e);
+          }
         })
         .catch(err => next(err));
     });
