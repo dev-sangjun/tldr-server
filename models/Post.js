@@ -27,6 +27,12 @@ const postSchema = new Schema(
   },
   {
     timestamps: true,
+    toObject: {
+      virtuals: true,
+    },
+    toJSON: {
+      virtuals: true,
+    },
   }
 );
 

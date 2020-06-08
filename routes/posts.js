@@ -22,10 +22,10 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", auth, async (req, res, next) => {
-  const { title, content, tags } = req.body,
+  const { folder, title, content, tags } = req.body,
     { _id } = req.user;
   try {
-    const post = await createPost(_id, title, content, tags);
+    const post = await createPost(_id, folder, title, content, tags);
     res.json(post);
   } catch (e) {
     next(e);

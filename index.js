@@ -44,6 +44,8 @@ app.use("/login", login);
 app.use("/register", register);
 app.use("/users", auth, users);
 app.use("/posts", posts);
+app.use("/folders", folders);
+
 app.use((err, req, res, next) => {
   const status = err.status || 500;
   res.status(status);

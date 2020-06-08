@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 const Post = require("../models/Post");
 
-const createPost = (id, title, content, tags) =>
+const createPost = (id, folder, title, content, tags) =>
   new Promise((resolve, reject) => {
     const post = new Post({
       author: id,
+      folder,
       title,
       content,
       tags,

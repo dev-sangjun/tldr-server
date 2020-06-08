@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken"),
   User = require("../models/User"),
+  Folder = require("../models/Folder"),
   JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = (req, res, next) => {
@@ -16,8 +17,10 @@ module.exports = (req, res, next) => {
         .then(async user => {
           if (!user) return next(new Error("Invalid token: User not found."));
           try {
-            await user.populate("posts").execPopulate();
             await user.populate("folders").execPopulate();
+            await user
+              .populate({ path: "folders", populate: { path: "posts" } })
+              .execPopulate();
             req.user = user;
             req.token = token;
             next();
