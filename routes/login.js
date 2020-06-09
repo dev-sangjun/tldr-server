@@ -9,6 +9,10 @@ router.post("/", async (req, res, next) => {
     if (!user) return next(new Error("User not authenticated."));
     // user is authenticated
     const token = await user.generateToken();
+    await user.populate("folders").execPopulate();
+    await user
+      .populate({ path: "folders", populate: { path: "posts" } })
+      .execPopulate();
     res.json({ user, token });
   } catch (e) {
     next(e);
