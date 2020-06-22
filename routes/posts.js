@@ -1,5 +1,13 @@
+const { update } = require("../models/User");
+
 const router = require("express").Router(),
-  { createPost, getPost, getAllPosts } = require("../db/post"),
+  {
+    createPost,
+    getPost,
+    getAllPosts,
+    deletePost,
+    updatePost,
+  } = require("../db/post"),
   auth = require("../middlewares/auth");
 
 router.get("/", async (req, res) => {
@@ -21,6 +29,26 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.delete("/:id", auth, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await deletePost(id);
+    res.json(post);
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.patch("/:id", auth, async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  try {
+    const post = await updatePost(id, title, content);
+    res.json(post);
+  } catch (e) {
+    next(e);
+  }
+});
 router.post("/", auth, async (req, res, next) => {
   const { folder, title, content, tags } = req.body,
     { _id } = req.user;

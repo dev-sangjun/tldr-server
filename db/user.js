@@ -19,13 +19,15 @@ const createUser = (username, email, password) =>
 
 const authenticateUser = (username, password) =>
   new Promise((resolve, reject) => {
-    User.findOne({ username }).then(user => {
-      if (!user) return reject(new Error("User not found."));
-      user.comparePassword(password, (err, result) => {
-        if (err) return reject(err);
-        resolve(result ? user : null);
+    User.findOne({ username })
+      .sort({})
+      .then(user => {
+        if (!user) return reject(new Error("User not found."));
+        user.comparePassword(password, (err, result) => {
+          if (err) return reject(err);
+          resolve(result ? user : null);
+        });
       });
-    });
   });
 module.exports = {
   createUser,

@@ -30,6 +30,14 @@ const userSchema = new Schema(
         },
       },
     ],
+    refreshTokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
@@ -88,7 +96,7 @@ userSchema.methods.generateToken = async function () {
     user_id: this.id.toString(),
   };
   const options = {
-    expiresIn: 3600,
+    expiresIn: 900,
   };
   const token = jwt.sign(payload, JWT_SECRET, options);
   this.tokens = this.tokens.concat({ token });

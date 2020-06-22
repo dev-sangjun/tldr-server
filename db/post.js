@@ -23,6 +23,23 @@ const getPost = id =>
       .catch(err => reject(err));
   });
 
+const deletePost = id =>
+  new Promise((resolve, reject) => {
+    Post.findByIdAndDelete(id)
+      .then(doc => resolve(doc))
+      .catch(err => reject(err));
+  });
+
+const updatePost = (id, title, content) =>
+  new Promise((resolve, reject) => {
+    Post.findByIdAndUpdate(id, {
+      title,
+      content,
+    })
+      .then(doc => resolve(doc))
+      .catch(err => reject(err));
+  });
+
 const getAllPosts = () =>
   new Promise((resolve, reject) => {
     Post.find({})
@@ -34,4 +51,6 @@ module.exports = {
   createPost,
   getPost,
   getAllPosts,
+  deletePost,
+  updatePost,
 };

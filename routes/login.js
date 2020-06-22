@@ -9,7 +9,6 @@ router.post("/", async (req, res, next) => {
     if (!user) return next(new Error("User not authenticated."));
     // user is authenticated
     const token = await user.generateToken();
-    console.log(token);
     res.json(token);
   } catch (e) {
     next(e);

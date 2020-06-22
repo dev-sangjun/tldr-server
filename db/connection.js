@@ -5,5 +5,6 @@ mongoose.connect(uri, {
   useCreateIndex: true,
   useUnifiedTopology: true,
   autoIndex: true,
+  useFindAndModify: false,
 });
 module.exports = mongoose.connection;

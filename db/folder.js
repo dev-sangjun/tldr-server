@@ -1,5 +1,6 @@
 const Folder = require("../models/Folder"),
-  User = require("../models/User");
+  User = require("../models/User"),
+  Post = require("../models/Post");
 
 const createFolder = (id, title) =>
   new Promise((resolve, reject) => {
@@ -29,7 +30,30 @@ const getFolders = id =>
       .catch(err => reject(err));
   });
 
+const deleteFolder = id =>
+  new Promise((resolve, reject) => {
+    Folder.findByIdAndDelete(id)
+      .then(async doc => {
+        await doc.populate("posts").execPopulate();
+        doc.posts.map(post =>
+          Post.findByIdAndDelete(post._id).catch(err => reject(err))
+        );
+        resolve(doc);
+      })
+      .catch(err => reject(err));
+  });
+
+const updateFolder = (id, title) =>
+  new Promise((resolve, reject) => {
+    Post.findByIdAndUpdate(id, {
+      title,
+    })
+      .then(doc => resolve(doc))
+      .catch(err => reject(err));
+  });
 module.exports = {
   createFolder,
   getFolders,
+  deleteFolder,
+  updateFolder,
 };
