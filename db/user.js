@@ -7,7 +7,7 @@ const createUser = (username, email, password) =>
     User.countDocuments({ username })
       .then(count => {
         if (count > 0)
-          return reject(new Error("This username is already registered."));
+          return reject(new Error("The username is already registered."));
         const user = new User({ username, email, password });
         user
           .save()

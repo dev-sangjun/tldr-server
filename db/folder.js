@@ -45,7 +45,7 @@ const deleteFolder = id =>
 
 const updateFolder = (id, title) =>
   new Promise((resolve, reject) => {
-    Post.findByIdAndUpdate(id, {
+    Folder.findByIdAndUpdate(id, {
       title,
     })
       .then(doc => resolve(doc))
